@@ -1,0 +1,4 @@
+/.env
+/.envrc
+/flake.lock
+/result
