@@ -15,7 +15,7 @@
         else if self ? mossUrl then
           self.mossUrl
         else
-          "http://example.com/mossnet";
+          builtins.trace "Error: No valid MOSS script URL provided. Please set MOSS_SCRIPT_URL or provide a flake input." (throw "No MOSS script URL provided. Build failed.");
       in {
         # Define the moss package as a default package for easier building
         defaultPackage = pkgs.stdenv.mkDerivation {
