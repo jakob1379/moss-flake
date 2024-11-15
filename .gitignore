@@ -2,3 +2,4 @@
 /.envrc
 /flake.lock
 /result
+*~
