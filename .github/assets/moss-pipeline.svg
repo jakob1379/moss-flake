@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" width="960" height="340" role="img" aria-labelledby="t d">
+  <title id="t">How moss-flake builds MOSS</title>
+  <desc id="d">You supply the URL of your private copy of the mossnet script in MOSS_SCRIPT_URL. Nix fetchurl downloads it and checks it against the sha256 pinned in flake.nix, installs it in the Nix store as bin/moss, and links it to ./result/bin/moss. The script itself is never stored in the repository.</desc>
+  <style>
+    :root {
+      --bg: #eef1e6;
+      --panel: #f8faf2;
+      --ink: #22301e;
+      --muted: #66705c;
+      --line: #b6bfa4;
+      --moss: #557a32;
+      --lichen: #d5dfb5;
+      --stone: #8a8c7e;
+      --store: #3f6787;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #18241b;
+        --panel: #1f2d22;
+        --ink: #dfe6d4;
+        --muted: #9aa58f;
+        --line: #3d4e3c;
+        --moss: #a3c27a;
+        --lichen: #34472c;
+        --stone: #8a9384;
+        --store: #8db2d2;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .panel { fill: var(--panel); stroke: var(--line); stroke-width: 1.5; }
+    .boundary { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 6 5; }
+    .wire { fill: none; stroke: var(--line); stroke-width: 2; stroke-linecap: round; }
+    .wire-dot { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 2 4; stroke-linecap: round; }
+    .head { fill: var(--line); }
+    .sans { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    .ink { fill: var(--ink); }
+    .muted { fill: var(--muted); }
+    .moss { fill: var(--moss); }
+    .storec { fill: var(--store); }
+    .track { fill: var(--lichen); }
+    .bar { fill: var(--moss); }
+    .ring { fill: none; stroke-width: 2.5; }
+    .ring-gate { stroke: var(--moss); }
+    .ring-store { stroke: var(--store); }
+    .chk-bg { fill: var(--moss); }
+    .chk { fill: none; stroke: var(--panel); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 16; }
+    .link { fill: none; stroke: var(--store); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 30; }
+    .cover { fill: var(--panel); }
+    .doc-a { fill: var(--panel); stroke: var(--stone); stroke-width: 1.6; }
+    .doc-b { fill: var(--moss); stroke: var(--moss); stroke-width: 1.6; }
+    .doc-line-a { stroke: var(--stone); stroke-width: 1.4; stroke-linecap: round; }
+    .doc-line-b { stroke: var(--panel); stroke-width: 1.4; stroke-linecap: round; }
+
+    .anim { animation-duration: 9s; animation-iteration-count: infinite; animation-timing-function: cubic-bezier(.45,0,.25,1); animation-fill-mode: both; }
+    .cover { transform-box: fill-box; transform-origin: 100% 50%; transform: scaleX(0); animation-name: reveal; }
+    .bar { transform-box: fill-box; transform-origin: 0 50%; animation-name: hash; }
+    .ring-gate { animation-name: gateOn; }
+    .check { animation-name: checkOn; }
+    .chk { animation-name: checkDraw; }
+    .ring-store { animation-name: storeOn; }
+    .link { animation-name: linkDraw; }
+    .result { animation-name: resultOn; }
+    .pa { opacity: 0; animation-name: packetA; }
+    .pb { opacity: 0; animation-name: packetB; }
+
+    @keyframes reveal { 0% { transform: scaleX(1); } 10%, 92% { transform: scaleX(0); } 98%, 100% { transform: scaleX(1); } }
+    @keyframes packetA {
+      0%, 10% { opacity: 0; transform: translateX(0); }
+      12% { opacity: 1; transform: translateX(0); }
+      27% { opacity: 1; transform: translateX(66px); }
+      30%, 100% { opacity: 0; transform: translateX(74px); }
+    }
+    @keyframes gateOn { 0%, 27% { opacity: 0; } 31%, 92% { opacity: 1; } 98%, 100% { opacity: 0; } }
+    @keyframes hash { 0%, 30% { transform: scaleX(0); } 46%, 92% { transform: scaleX(1); } 98%, 100% { transform: scaleX(0); } }
+    @keyframes checkOn { 0%, 46% { opacity: 0; } 48%, 92% { opacity: 1; } 98%, 100% { opacity: 0; } }
+    @keyframes checkDraw { 0%, 47% { stroke-dashoffset: 16; } 51%, 100% { stroke-dashoffset: 0; } }
+    @keyframes packetB {
+      0%, 50% { opacity: 0; transform: translateX(0); }
+      52% { opacity: 1; transform: translateX(0); }
+      65% { opacity: 1; transform: translateX(66px); }
+      68%, 100% { opacity: 0; transform: translateX(74px); }
+    }
+    @keyframes storeOn { 0%, 65% { opacity: 0; } 69%, 92% { opacity: 1; } 98%, 100% { opacity: 0; } }
+    @keyframes linkDraw { 0%, 69% { stroke-dashoffset: 30; } 76%, 92% { stroke-dashoffset: 0; } 98%, 100% { stroke-dashoffset: 30; } }
+    @keyframes resultOn { 0%, 72% { opacity: .28; } 80%, 92% { opacity: 1; } 98%, 100% { opacity: .28; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .anim { animation: none; }
+      .pa, .pb { opacity: 0; }
+    }
+  </style>
+
+  <rect class="bg" width="960" height="340" rx="18"/>
+
+  <rect class="boundary" x="304" y="22" width="280" height="76" rx="10"/>
+  <text class="mono ink" x="444" y="52" font-size="13" text-anchor="middle">github:jakob1379/moss-flake</text>
+  <text class="sans muted" x="444" y="77" font-size="13" text-anchor="middle">flake.nix pins the script's sha256</text>
+  <path class="wire-dot" d="M444 98 V136"/>
+
+  <rect class="panel" x="24" y="138" width="220" height="104" rx="12"/>
+  <text class="sans muted" x="44" y="166" font-size="13">You supply</text>
+  <text class="mono ink" x="44" y="194" font-size="14">MOSS_SCRIPT_URL</text>
+  <text class="mono moss" x="44" y="219" font-size="13">https://…/mossnet</text>
+  <rect class="cover anim" x="42" y="204" width="186" height="22"/>
+  <text class="sans muted" x="134" y="270" font-size="13" text-anchor="middle">your private copy,</text>
+  <text class="sans muted" x="134" y="288" font-size="13" text-anchor="middle">never stored in this repo</text>
+
+  <path class="wire" d="M250 190 H332"/>
+  <path class="head" d="M338 190 l-9 -5 v10 z"/>
+
+  <rect class="panel" x="344" y="138" width="200" height="104" rx="12"/>
+  <rect class="ring ring-gate anim" x="344" y="138" width="200" height="104" rx="12"/>
+  <text class="mono ink" x="364" y="168" font-size="14">fetchurl</text>
+  <g class="check anim">
+    <circle class="chk-bg" cx="520" cy="163" r="10"/>
+    <path class="chk anim" d="M515 163.5 l3.5 3.5 l6.5 -7"/>
+  </g>
+  <rect class="track" x="364" y="186" width="160" height="6" rx="3"/>
+  <rect class="bar anim" x="364" y="186" width="160" height="6" rx="3"/>
+  <text class="mono muted" x="364" y="221" font-size="13">sha256-FDoW…LY3Ns=</text>
+  <text class="sans muted" x="444" y="270" font-size="13" text-anchor="middle">download, then verify</text>
+  <text class="sans muted" x="444" y="288" font-size="13" text-anchor="middle">against the pinned hash</text>
+
+  <path class="wire" d="M550 190 H632"/>
+  <path class="head" d="M638 190 l-9 -5 v10 z"/>
+
+  <rect class="panel" x="644" y="138" width="292" height="104" rx="12"/>
+  <rect class="ring ring-store anim" x="644" y="138" width="292" height="104" rx="12"/>
+  <text class="sans muted" x="664" y="166" font-size="13">Nix store</text>
+  <text class="mono storec" x="664" y="194" font-size="14">/nix/store/…-moss-0.0.1</text>
+  <text class="mono ink" x="664" y="219" font-size="14">bin/moss</text>
+  <text class="sans muted" x="746" y="219" font-size="13">perl script</text>
+
+  <path class="wire" d="M790 242 V272" stroke-dasharray="2 4"/>
+  <path class="link anim" d="M790 242 V272"/>
+  <g class="result anim">
+    <text class="mono ink" x="790" y="298" font-size="14" text-anchor="middle">./result/bin/moss</text>
+    <text class="sans muted" x="790" y="320" font-size="13" text-anchor="middle">ready to run</text>
+  </g>
+
+  <g transform="translate(256 190)">
+    <g class="pa anim">
+      <path class="doc-a" d="M-10 -14 h13 l7 7 v21 h-20 z"/>
+      <path class="doc-line-a" d="M-5 -2 h10 M-5 3 h10 M-5 8 h7"/>
+    </g>
+  </g>
+  <g transform="translate(556 190)">
+    <g class="pb anim">
+      <path class="doc-b" d="M-10 -14 h13 l7 7 v21 h-20 z"/>
+      <path class="doc-line-b" d="M-5 -2 h10 M-5 3 h10 M-5 8 h7"/>
+    </g>
+  </g>
+</svg>
